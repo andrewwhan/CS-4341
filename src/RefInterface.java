@@ -1,16 +1,21 @@
 
 public class RefInterface 
 {
-	int playerNumber = 0;
+	// ToDo: Add Timer
+	
+	int playerNumber;
+	int boardHeight;
+	int boardWidth;
+	int piecesToWin;
+	int timeLimit;
 	
 	public void announce()
 	{
-		//This should send the Ref an identity and should update which player number we are
+		// This should send the Ref an identity and should update which player number we are
 	}
 	public void gameStart()
 	{
-		//This should get the game information from the Ref
-		/*
+		/* This should get the game information from the Ref
 		 * Game information consists of 5 numbers [in this order]: 
 		 * board height (#rows), 
 		 * board width (#columns), 
@@ -25,14 +30,12 @@ public class RefInterface
 	
 	public void makeMove(int column, int movetype)
 	{
-		//This should tell the Ref which column to put the piece into and if it is a popout or a normal move 
+		// This should tell the Ref which column to put the piece into and if it is a popout or a normal move 
 	}
 	
 	public void updateBoard()
 	{
-		//This should read the Ref's output as to where the other player went
+		// This should read the Ref's output as to where the other player went
 	}
 
-	//ToDo: Add Timer
-	//ToDo: Add Ref interface
 }
