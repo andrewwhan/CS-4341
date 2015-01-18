@@ -1,36 +1,66 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 
 public class RefInterface 
 {
 	// ToDo: Add Timer
-	
+	String name = "Placeholder";
+	Board boardstate;
 	int playerNumber;
 	int boardHeight;
 	int boardWidth;
 	int piecesToWin;
 	int timeLimit;
 	
-	public void announce()
+	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	
+	public void announce() throws IOException
 	{
-		// This should send the Ref an identity and should update which player number we are
+		//Announce our name to the referee
+		System.out.println(name);
+		
+		//Identify whether we are the first or second player
+		Scanner s = new Scanner(in.readLine());
+		s.next(); //Skip text "player1:"
+		if(s.hasNext(name)){ //If our name is the next token we're player 1, otherwise we're player 2
+			playerNumber = 1;
+		}
+		else{
+			playerNumber = 2;
+		}
+		System.err.println("We're player " + playerNumber);
+		s.close();
 	}
-	public void gameStart()
+
+	public Board gameStart() throws IOException
 	{
-		/* This should get the game information from the Ref
-		 * Game information consists of 5 numbers [in this order]: 
-		 * board height (#rows), 
-		 * board width (#columns), 
-		 * number of pieces to win (the N in Connect-N), 
-		 * turn of the player (1 indicating 1st player, and 2 indicating 2nd player), 
-		 * and the time limit to make a move in seconds. 
-		 * 
-		 * Once the players receive these information, the game starts immediately. 
-		 * These are sent as a one line separated with spaces.
+		/* Retrieves game information from the referee.
+		 * Returns the empty board if we are playing first, or the board with the opponent's move made if we are playing second
 		 */
+		Scanner s = new Scanner(in.readLine());
+		boardHeight = s.nextInt();
+		boardWidth = s.nextInt();
+		boardstate = new Board(boardHeight, boardWidth);
+		
+		piecesToWin = s.nextInt();
+		int firstPlayer = s.nextInt();
+		timeLimit = s.nextInt();
+		s.close();
+		
+		//If we're not the first player, wait for the board to be updated.
+		if(firstPlayer != playerNumber){
+			updateBoard();
+		};
+		return boardstate;
 	}
 	
 	public void makeMove(int column, int movetype)
 	{
-		// This should tell the Ref which column to put the piece into and if it is a popout or a normal move 
+		// Sends our move to the referee in the form "column movetype"
+		System.out.println(column + " " + movetype);
 	}
 	
 	public void updateBoard()

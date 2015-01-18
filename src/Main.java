@@ -1,11 +1,16 @@
+import java.io.IOException;
+
 
 public class Main 
 {
-
-	public static void main(String[] args) 
+	
+	public static void main(String[] args) throws IOException 
 	{
-		//
-
+		Board boardstate;
+		
+		RefInterface refInt = new RefInterface();
+		refInt.announce();
+		boardstate = refInt.gameStart();
 	}
 	
 	public void minimax()
@@ -20,5 +25,4 @@ public class Main
 		// returning false means stop searching
 		return true;
 	}
-
 }
