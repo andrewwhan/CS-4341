@@ -21,6 +21,16 @@ public class Heuristic
 		// This should modify the value based on how central the move is
 	}
 	
+	private void win()
+	{
+		// This should set value to a large number
+	}
+	
+	private void loss()
+	{
+		// This should set value to -1
+	}
+	
 	// Add Heuristic helper methods
 	// Todo: Add multiple Heuristic levels based on time remaining
 }
