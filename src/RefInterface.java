@@ -14,6 +14,7 @@ public class RefInterface
 	int boardWidth;
 	int piecesToWin;
 	int timeLimit;
+	int turn = 0;
 	
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
@@ -63,9 +64,39 @@ public class RefInterface
 		System.out.println(column + " " + movetype);
 	}
 	
-	public void updateBoard()
+	public void updateBoard() throws IOException
 	{
-		// This should read the Ref's output as to where the other player went
-	}
-
+		int column;
+		int movetype;
+		int player;
+		turn++;
+		Scanner s = new Scanner(in.readLine());
+		column = s.nextInt();
+		if (column == -1)
+		{
+			//We won the game
+			System.out.println("Good Game!");
+		}
+		else if(column == -2)
+		{
+			// We lost the game
+			System.out.println("Congradulations");
+		}
+		else if(column == -3)
+		{
+			// We tied the game
+			System.out.println("Well Played");
+		}
+		movetype = s.nextInt();
+		s.close();
+		if(((turn & 1) == 0 && playerNumber == 1) || ((turn & 1) == 1 && playerNumber == 2))
+		{
+			player = 1;
+		}
+		else
+		{
+			player = 2;
+		}
+		boardstate.makeMove(player, column, movetype);
+	}	
 }
