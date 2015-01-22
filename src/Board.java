@@ -1,18 +1,11 @@
 
 public class Board {
-	// I was thinking of having a 0 represent an open space, 1 represent our piece, and a 2 represent an opponents piece
 	
 	int[][] boardstate;
-	int height;
 	
 	Board(int height, int width){
 		boardstate = new int[height][width];
-		for(int i=0; i<height; i++){
-			for(int j=0; j<width; j++){
-				System.out.print(boardstate[i][j]);
-			}
-			System.out.println();
-		}
+		printBoard();
 	}
 	
 	public void makeMove(int player, int column, int movetype)
@@ -20,7 +13,7 @@ public class Board {
 		if(movetype == 1)
 		{
 			int newheight = 0;
-			for(int i=0; i<boardstate[newheight][column]; i=0)
+			while(boardstate[newheight][column] > 0)
 			{
 				newheight ++;
 			}
@@ -29,11 +22,22 @@ public class Board {
 		
 		if(movetype == 0)
 		{
-			for( int i=0; i < height; i++)
+			for( int i=0; i < boardstate.length-1; i++)
 			{
 				boardstate[i][column] = boardstate[i+1][column];
 			}
-			boardstate[height-1][column] = 0;
+			boardstate[boardstate.length-1][column] = 0;
 		}
+		printBoard();
+	}
+	
+	public void printBoard(){
+		for(int i=boardstate.length-1; i>=0; i--){
+			for(int j=0; j<boardstate[i].length; j++){
+				System.err.print(boardstate[i][j]);
+			}
+			System.err.println();
+		}
+		System.err.println();
 	}
 }
