@@ -8,13 +8,12 @@ public class RefInterface
 {
 	// ToDo: Add Timer
 	String name = "name";
-	Board boardstate;
+	Board board;
 	int playerNumber;
 	int boardHeight;
 	int boardWidth;
 	int piecesToWin;
 	int timeLimit;
-	int turn = 0;
 	
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
@@ -44,9 +43,9 @@ public class RefInterface
 		Scanner s = new Scanner(in.readLine());
 		boardHeight = s.nextInt();
 		boardWidth = s.nextInt();
-		boardstate = new Board(boardHeight, boardWidth);
-		
 		piecesToWin = s.nextInt();
+		board = new Board(boardHeight, boardWidth, piecesToWin);
+		
 		int firstPlayer = s.nextInt();
 		timeLimit = s.nextInt();
 		s.close();
@@ -55,7 +54,7 @@ public class RefInterface
 		if(firstPlayer != playerNumber){
 			updateBoard();
 		};
-		return boardstate;
+		return board;
 	}
 	
 	public void makeMove(int column, int movetype)
@@ -68,35 +67,26 @@ public class RefInterface
 	{
 		int column;
 		int movetype;
-		int player;
-		turn++;
 		Scanner s = new Scanner(in.readLine());
 		column = s.nextInt();
 		if (column == -1)
 		{
-			//We won the game
-			System.out.println("Good Game!");
+			// We won the game
+			System.err.println("Good Game!");
 		}
 		else if(column == -2)
 		{
 			// We lost the game
-			System.out.println("Congradulations");
+			System.err.println("Congratulations");
 		}
 		else if(column == -3)
 		{
 			// We tied the game
-			System.out.println("Well Played");
+			System.err.println("Well Played");
 		}
 		movetype = s.nextInt();
 		s.close();
-		if(((turn & 1) == 0 && playerNumber == 1) || ((turn & 1) == 1 && playerNumber == 2))
-		{
-			player = 1;
-		}
-		else
-		{
-			player = 2;
-		}
-		boardstate.makeMove(player, column, movetype);
+		// For our internal representation of the boardstate our opponent's pieces are 2's
+		board.makeMove(2, column, movetype);
 	}	
 }

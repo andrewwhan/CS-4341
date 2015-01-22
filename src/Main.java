@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Random;
 
 
 public class Main 
@@ -6,11 +7,19 @@ public class Main
 	
 	public static void main(String[] args) throws IOException 
 	{
-		Board boardstate;
+		Board board;
+		Heuristic heuristic = new Heuristic();
 		
 		RefInterface refInt = new RefInterface();
 		refInt.announce();
-		boardstate = refInt.gameStart();
+		board = refInt.gameStart();
+		while(true){
+			int column = new Random().nextInt(board.boardstate.length);
+			board.makeMove(1, column, 1);
+			refInt.makeMove(column, 1);
+			refInt.updateBoard();
+			System.err.println(heuristic.getValue(board));
+		}
 	}
 	
 	public void minimax()

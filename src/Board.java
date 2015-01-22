@@ -2,22 +2,35 @@
 public class Board {
 	
 	int[][] boardstate;
+	int piecesToWin;
 	
-	Board(int height, int width){
+	Board(int height, int width, int piecesToWin){
 		boardstate = new int[height][width];
+		this.piecesToWin = piecesToWin;
 		printBoard();
+	}
+	
+	//Copy constructor
+	Board(Board copyBoard){
+		boardstate = copyBoard.boardstate.clone();
+		for(int i=0; i<copyBoard.boardstate.length; i++){
+			boardstate[i] = copyBoard.boardstate[i].clone();
+		}
+		piecesToWin = copyBoard.piecesToWin;
 	}
 	
 	public void makeMove(int player, int column, int movetype)
 	{
 		if(movetype == 1)
 		{
-			int newheight = 0;
-			while(boardstate[newheight][column] > 0)
-			{
-				newheight ++;
+			if(!columnFull(column)){
+				int newheight = 0;
+				while(boardstate[newheight][column] > 0 && newheight < boardstate.length)
+				{
+					newheight ++;
+				}
+				boardstate[newheight][column] = player;
 			}
-			boardstate[newheight][column] = player;
 		}
 		
 		if(movetype == 0)
@@ -31,6 +44,7 @@ public class Board {
 		printBoard();
 	}
 	
+	//Print the board
 	public void printBoard(){
 		for(int i=boardstate.length-1; i>=0; i--){
 			for(int j=0; j<boardstate[i].length; j++){
@@ -39,5 +53,18 @@ public class Board {
 			System.err.println();
 		}
 		System.err.println();
+	}
+	
+	//Checks if the given column is full
+	public boolean columnFull(int column){
+		return boardstate[boardstate.length-1][column] != 0;
+	}
+	
+	//Used to phantom play moves and see what the resulting board state would be.
+	public Board tryMove(int player, int column, int movetype){
+		System.err.println("Trying move");
+		Board returnBoard = new Board(this);
+		returnBoard.makeMove(player, column, movetype);
+		return returnBoard;
 	}
 }
