@@ -67,4 +67,15 @@ public class Board {
 		returnBoard.makeMove(player, column, movetype);
 		return returnBoard;
 	}
+	
+	public boolean validMove(int player, int column, int movetype){
+		if(movetype == 1 && columnFull(column)){
+			return false;
+		}
+		if(movetype == 0 && (boardstate[0][column] != player)){
+			return false;
+		}
+		
+		return true;
+	}
 }

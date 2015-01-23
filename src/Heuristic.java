@@ -1,7 +1,9 @@
+import java.util.Random;
+
 
 public class Heuristic 
 {
-	int value;
+	int value = 0;
 	Board board;
 	
 	public int getValue( Board boardstate)
@@ -10,6 +12,8 @@ public class Heuristic
 		// gets the current board states then uses the helper methods to return a value of a move
 		win();
 		loss();
+		value += new Random().nextInt(100);
+		System.err.println(value);
 		return value;
 	}
 	
