@@ -7,7 +7,10 @@ public class Heuristic
 	public int getValue( Board boardstate)
 	{
 		board = boardstate;
+		value = 0;
 		// gets the current board states then uses the helper methods to return a value of a move
+		checkAdjacent();
+		central();
 		win();
 		loss();
 		return value;
@@ -15,12 +18,40 @@ public class Heuristic
 	
 	private void checkAdjacent()
 	{
-		// This should modify the value based on number of connected tiles 
+		for (int i = 2; i < board.piecesToWin; i++)
+		{
+			for(int j = 0; j < board.boardstate.length; j++)
+			{
+				for(int k = 0; k <board.boardstate[j].length; k++)
+				{
+					if (nInARow(board.boardstate, j,k) >= i)
+					{
+						value += 1;
+					}
+				}
+			}
+		}
 	}
 	
 	private void central()
 	{
-		// This should modify the value based on how central the move is
+		int center = Math.abs(board.boardstate[1].length/2);
+		for(int i = 0; i < board.boardstate.length; i++)
+		{
+			for(int j=0; j < board.boardstate[i].length; j++)
+			{
+				if(board.boardstate[i][j] == 1)
+				{
+					value += center - Math.abs(j-center);
+					value += board.boardstate.length - i;
+				}
+				if(board.boardstate[i][j] == 2)
+				{
+					value -= center - Math.abs(j-center);
+					value -= board.boardstate.length - i;
+				}
+			}
+		}
 	}
 	
 	private void win()
