@@ -11,11 +11,15 @@ public class Heuristic
 		board = boardstate;
 		value = 0;
 		// gets the current board states then uses the helper methods to return a value of a move
+		// System.out.println("value at start:" + value);
 		checkAdjacent();
+		// System.out.println("value after checkAdjacent:" + value);
 		central();
+		// System.out.println("value after central:" + value);
+		bottom();
 		win();
 		loss();
-		value += new Random().nextInt(100);
+		// value += new Random().nextInt(100);
 		System.err.println(value);
 		return value;
 	}
@@ -28,9 +32,13 @@ public class Heuristic
 			{
 				for(int k = 0; k <board.boardstate[j].length; k++)
 				{
-					if (nInARow(board.boardstate, j,k) >= i)
+					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 1)
 					{
 						value += 1;
+					}
+					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 2)
+					{
+						value -= 1;
 					}
 				}
 			}
@@ -54,6 +62,21 @@ public class Heuristic
 					value -= center - Math.abs(j-center);
 					value -= board.boardstate.length - i;
 				}
+			}
+		}
+	}
+	
+	private void bottom()
+	{
+		for(int i=0; i<board.boardstate[0].length; i++)
+		{
+			if(board.boardstate[0][i] == 1)
+			{
+				value += 1;
+			}
+			if(board.boardstate[0][i] == 2)
+			{
+				value -= 1;
 			}
 		}
 	}
@@ -93,7 +116,7 @@ public class Heuristic
 	public int nInARow(int[][] boardstate, int row, int column){
 		int player = boardstate[row][column];
 		if(player == 0){
-			System.err.println("Null player");
+//			System.err.println("Null player");
 			return 0;
 		}
 		
