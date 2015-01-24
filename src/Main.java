@@ -14,17 +14,14 @@ public class Main
 		refInt.announce();
 		board = refInt.gameStart();
 		while(true){
-//			int column = new Random().nextInt(board.boardstate.length);
-//			board.makeMove(1, column, 1);
-//			refInt.makeMove(column, 1);
-			int[] bestMove = minimax(board, 1, true, 2);
+			int[] bestMove = minimax(board, 1, true, 3, -10000, 10000);
 			board.makeMove(1, bestMove[0], bestMove[1]);
 			refInt.makeMove(bestMove[0], bestMove[1]);
 			refInt.updateBoard();
 		}
 	}
 	
-	public static int[] minimax(Board board, int player, boolean root, int depth)
+	public static int[] minimax(Board board, int player, boolean root, int depth, int alpha, int beta)
 	{
 		//Check for termination
 		if(depth == 0){
@@ -46,7 +43,7 @@ public class Main
 					//Recursive call to minimax to perform our depth first search
 					//Pass it the board that would result if we were to try this move, the opposite player number from the current call,
 					//The fact that it is not the root call, and to only proceed for depth-1 more calls.
-					int miniReturn = minimax(board.tryMove(player, col, mov), (player % 2) + 1, false, depth-1)[0];
+					int miniReturn = minimax(board.tryMove(player, col, mov), (player % 2) + 1, false, depth-1, alpha, beta)[0];
 					//If this call is player one we're trying to max.
 					if(player == 1){
 						//If we have the best move record the value and the move
@@ -54,6 +51,18 @@ public class Main
 							value = miniReturn;
 							column = col;
 							movetype = mov;
+							//If this branch is better for us than our opponent's worst move, the opponent won't pick it; prune.
+							if(value > beta){
+								int[] returnValue = new int[1];
+								returnValue[0] = value;
+								System.err.println("Prune " + value + " > " + beta);
+								return returnValue;
+							}
+							//If we have a better move than alpha record it
+							if(value > alpha){
+								System.err.println("Set alpha to " + value);
+								alpha = value;
+							}
 						}
 					}
 					//Otherwise we're trying to min.
@@ -63,6 +72,18 @@ public class Main
 							value = miniReturn;
 							column = col;
 							movetype = mov;
+							//If this branch is worse than our best move we won't pick it; prune.
+							if(value < alpha){
+								int[] returnValue = new int[1];
+								returnValue[0] = value;
+								System.err.println("Prune " + value + " < " + alpha);
+								return returnValue;
+							}
+							//If the opponent has a better move than beta record it
+							if(value < beta){
+								System.err.println("Set beta to " + value);
+								beta = value;
+							}
 						}
 					}
 				}
@@ -83,13 +104,5 @@ public class Main
 			return returnValue;
 		}
 
-	}
-	
-	private boolean alphaBeta()
-	{
-		// This should use alpha beta pruning to determine if we should continue searching down a branch
-		// returning true means continue searching
-		// returning false means stop searching
-		return true;
 	}
 }
