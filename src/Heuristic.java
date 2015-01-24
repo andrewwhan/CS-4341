@@ -1,5 +1,3 @@
-import java.util.Random;
-
 
 public class Heuristic 
 {
@@ -20,7 +18,7 @@ public class Heuristic
 		win();
 		loss();
 		// value += new Random().nextInt(100);
-		System.err.println(value);
+		//System.err.println(value);
 		return value;
 	}
 	
