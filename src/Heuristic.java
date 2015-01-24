@@ -59,11 +59,11 @@ public class Heuristic
 				{
 					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 1)
 					{
-						value += 1;
+						value += 2;
 					}
 					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 2)
 					{
-						value -= 1;
+						value -= 2;
 					}
 				}
 			}
@@ -108,32 +108,36 @@ public class Heuristic
 		}
 	}
 	
-	private void win()
+	public boolean win()
 	{
 		for(int i=0; i<board.boardstate.length; i++){
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 1){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
 						value += 9001;
-						return;
+						return true;
 					}
 				}
 			}
 		}
+		
+		return false;
 	}
 	
-	private void loss()
+	public boolean loss()
 	{
 		for(int i=0; i<board.boardstate.length; i++){
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 2){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
 						value += -9001;
-						return;
+						return true;
 					}
 				}
 			}
 		}
+		
+		return false;
 	}
 	
 	// Add Heuristic helper methods
