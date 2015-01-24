@@ -1,5 +1,3 @@
-import java.util.Random;
-
 
 public class Heuristic 
 {
@@ -21,7 +19,7 @@ public class Heuristic
 		win();
 		loss();
 		// value += new Random().nextInt(100);
-		System.err.println(value);
+		//System.err.println(value);
 		return value;
 	}
 	
@@ -144,7 +142,6 @@ public class Heuristic
 	public int nInARow(int[][] boardstate, int row, int column){
 		int player = boardstate[row][column];
 		if(player == 0){
-//			System.err.println("Null player");
 			return 0;
 		}
 		

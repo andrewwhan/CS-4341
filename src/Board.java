@@ -7,7 +7,7 @@ public class Board {
 	Board(int height, int width, int piecesToWin){
 		boardstate = new int[height][width];
 		this.piecesToWin = piecesToWin;
-		printBoard();
+		//printBoard();
 	}
 	
 	//Copy constructor
@@ -41,7 +41,7 @@ public class Board {
 			}
 			boardstate[boardstate.length-1][column] = 0;
 		}
-		printBoard();
+		//printBoard();
 	}
 	
 	//Print the board
@@ -62,7 +62,7 @@ public class Board {
 	
 	//Used to phantom play moves and see what the resulting board state would be.
 	public Board tryMove(int player, int column, int movetype){
-		System.err.println("Trying move");
+		//System.err.println("Trying move");
 		Board returnBoard = new Board(this);
 		returnBoard.makeMove(player, column, movetype);
 		return returnBoard;
