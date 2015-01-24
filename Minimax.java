@@ -45,16 +45,6 @@ public class Minimax implements Runnable {
 			return new int[1];
 		}
 		
-		if(new Heuristic().loss())
-		{
-			return new int[1];
-		}
-		
-		if(new Heuristic().win())
-		{
-			return new int[1];
-		}
-		
 		int value;
 		//If we're player 1 and maxing start value off low, if we're minning start value high
 		value = (player == 1 ? -10000 : 10000);

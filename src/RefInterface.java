@@ -61,6 +61,8 @@ public class RefInterface
 	{
 		// Sends our move to the referee in the form "column movetype"
 		System.out.println(column + " " + movetype);
+		System.out.println(" ");
+		board.printBoard();
 	}
 	
 	public void updateBoard() throws IOException

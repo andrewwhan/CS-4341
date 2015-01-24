@@ -14,7 +14,7 @@ public class Main
 		while(true){
 			Thread minThread = new Thread(minimax);
 			minThread.start();
-			Thread.sleep(refInt.timeLimit * 1000 - 500);
+			Thread.sleep(refInt.timeLimit * 1000 - 250);
 			int[] bestMove = minimax.bestMove.clone();
 			minThread.interrupt();
 			board.makeMove(1, bestMove[0], bestMove[1]);
