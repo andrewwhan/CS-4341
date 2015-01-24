@@ -4,6 +4,11 @@ public class Heuristic
 	int value = 0;
 	Board board;
 	
+	public boolean terminalTest(Board boardstate){
+		board = boardstate;
+		return win() || loss();
+	}
+	
 	// Performs a slow, but in-depth, heuristic lookup
 	public int getValue( Board boardstate)
 	{
@@ -18,7 +23,6 @@ public class Heuristic
 		bottom();
 		win();
 		loss();
-		// value += new Random().nextInt(100);
 		//System.err.println(value);
 		return value;
 	}
@@ -108,32 +112,34 @@ public class Heuristic
 		}
 	}
 	
-	private void win()
+	private boolean win()
 	{
 		for(int i=0; i<board.boardstate.length; i++){
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 1){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
 						value += 9001;
-						return;
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 	
-	private void loss()
+	private boolean loss()
 	{
 		for(int i=0; i<board.boardstate.length; i++){
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 2){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
 						value += -9001;
-						return;
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 	
 	// Add Heuristic helper methods

@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 
 public class Minimax implements Runnable {
 
@@ -17,7 +15,7 @@ public class Minimax implements Runnable {
 		int depth = 1;
 		while(true){
 			bestMove = minimax(board, 1, true, depth, -10000, 10000);
-			//System.err.println("Completed depth " + depth + " " + bestMove[0] + " " + bestMove[1]);
+			System.err.println("Completed depth " + depth + " " + bestMove[0] + " " + bestMove[1]);
 			depth++;
 			if(interrupted){
 				interrupted = false;
@@ -28,12 +26,6 @@ public class Minimax implements Runnable {
 
 	public int[] minimax(Board board, int player, boolean root, int depth, int alpha, int beta)
 	{
-		//Check for termination
-		if(depth == 0){
-			int[] returnValue = new int[1];
-			returnValue[0] = new Heuristic().getValue(board);
-			return returnValue;
-		}
 		
 		//Check for interrupt
 		if(Thread.interrupted()){
@@ -43,6 +35,20 @@ public class Minimax implements Runnable {
 
 		if(interrupted){
 			return new int[1];
+		}
+		
+		//Check for termination based on depth
+		if(depth == 0){
+			int[] returnValue = new int[1];
+			returnValue[0] = new Heuristic().getValue(board);
+			return returnValue;
+		}
+		
+		//Terminal test for if game is won/lost
+		if(new Heuristic().terminalTest(board)){
+			int[] returnValue = new int[1];
+			returnValue[0] = new Heuristic().getValue(board);
+			return returnValue;
 		}
 		
 		int value;
