@@ -6,6 +6,7 @@ public class Heuristic
 	int value = 0;
 	Board board;
 	
+	// Performs a slow, but in-depth, heuristic lookup
 	public int getValue( Board boardstate)
 	{
 		board = boardstate;
@@ -20,6 +21,32 @@ public class Heuristic
 		win();
 		loss();
 		// value += new Random().nextInt(100);
+		System.err.println(value);
+		return value;
+	}
+	
+	// Performs a fast, but simple, heuristic function
+	public int getValueFast( Board boardstate)
+	{
+		board = boardstate;
+		value = 0;
+		checkAdjacent();
+		win();
+		loss();
+		System.err.println(value);
+		return value;
+	}
+	
+	// Performs a medium complexity heuristic function
+	public int getValueNormal( Board boardstate)
+	{
+		board = boardstate;
+		value = 0;
+		checkAdjacent();
+		central();
+		bottom();
+		win();
+		loss();
 		System.err.println(value);
 		return value;
 	}
@@ -45,9 +72,10 @@ public class Heuristic
 		}
 	}
 	
+	// Adds value to moves that are placed in a central location
 	private void central()
 	{
-		int center = Math.abs(board.boardstate[1].length/2);
+		int center = board.boardstate[0].length/2;
 		for(int i = 0; i < board.boardstate.length; i++)
 		{
 			for(int j=0; j < board.boardstate[i].length; j++)
@@ -66,6 +94,7 @@ public class Heuristic
 		}
 	}
 	
+	// Adds value to moves that put our pieces on the bottom row, as they can be popped out if needed
 	private void bottom()
 	{
 		for(int i=0; i<board.boardstate[0].length; i++)
@@ -110,7 +139,6 @@ public class Heuristic
 	}
 	
 	// Add Heuristic helper methods
-	// Todo: Add multiple Heuristic levels based on time remaining
 	
 	//Given the location of a piece, returns the length of the longest chain of pieces that particular piece is part of.
 	public int nInARow(int[][] boardstate, int row, int column){
