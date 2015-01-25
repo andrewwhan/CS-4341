@@ -3,9 +3,17 @@ public class Heuristic
 {
 	int value = 0;
 	Board board;
+	int[][] winningSpaceBoard;
+	static int adjacencyMultiplier;
+	static int winningSpaceMultiplier;
+	static int centralMultiplier;
+	static int heightMultiplier;
+	static int bottomMultiplier;
+	static int popoutMultiplier;
 	
 	public boolean terminalTest(Board boardstate){
 		board = boardstate;
+		winningSpaceBoard = new int[board.boardstate.length][board.boardstate[0].length];
 		return win() || loss();
 	}
 	
@@ -14,10 +22,12 @@ public class Heuristic
 	{
 		board = boardstate;
 		value = 0;
+		winningSpaceBoard = new int[board.boardstate.length][board.boardstate[0].length];
 		// gets the current board states then uses the helper methods to return a value of a move
 		// System.out.println("value at start:" + value);
 		checkAdjacent();
 		// System.out.println("value after checkAdjacent:" + value);
+		countWinningSpaces();
 		central();
 		// System.out.println("value after central:" + value);
 		bottom();
@@ -33,10 +43,11 @@ public class Heuristic
 	{
 		board = boardstate;
 		value = 0;
+		winningSpaceBoard = new int[board.boardstate.length][board.boardstate[0].length];
 		checkAdjacent();
 		win();
 		loss();
-		System.err.println(value);
+		//System.err.println(value);
 		return value;
 	}
 	
@@ -45,12 +56,13 @@ public class Heuristic
 	{
 		board = boardstate;
 		value = 0;
+		winningSpaceBoard = new int[board.boardstate.length][board.boardstate[0].length];
 		checkAdjacent();
 		central();
 		bottom();
 		win();
 		loss();
-		System.err.println(value);
+		//System.err.println(value);
 		return value;
 	}
 	
@@ -64,8 +76,23 @@ public class Heuristic
 				if(chain > 1){
 					//Add or subtract to value based on whether it's their chain or our chain
 					int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
-					value += 2*chain*usOrThem;
+					value += adjacencyMultiplier*chain*usOrThem;
 				}			
+			}
+		}
+	}
+	
+	private void countWinningSpaces(){
+		for(int i=0; i<winningSpaceBoard.length; i++){
+			for(int j=0; j<winningSpaceBoard[i].length; j++){
+				if(winningSpaceBoard[i][j] == 1){
+					value += 5*winningSpaceMultiplier;
+					//System.err.println("Our winning space");
+				}
+				else if(winningSpaceBoard[i][j] == 2){
+					value -= 5*winningSpaceMultiplier;
+					//System.err.println("Their winning space");
+				}
 			}
 		}
 	}
@@ -79,8 +106,8 @@ public class Heuristic
 			for(int j=0; j < board.boardstate[i].length; j++)
 			{
 				int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
-				value += usOrThem*2*(center - Math.abs(j-center));
-				value += usOrThem*board.boardstate.length - i;
+				value += usOrThem*centralMultiplier*(center - Math.abs(j-center));
+				value += usOrThem*(heightMultiplier/2)*(board.boardstate.length - i);
 			}
 		}
 	}
@@ -92,21 +119,21 @@ public class Heuristic
 		{
 			if(board.boardstate[0][i] == 1)
 			{
-				value += 1;
+				value += bottomMultiplier;
 			}
 			if(board.boardstate[0][i] == 2)
 			{
-				value -= 1;
+				value -= bottomMultiplier;
 			}
 		}
 	}
 	
 	private void popout(){
 		if(board.ourPopout){
-			value += 50;
+			value += 10 * popoutMultiplier;
 		}
 		if(board.theirPopout){
-			value -= 50;
+			value -= 10 * popoutMultiplier;
 		}
 	}
 	
@@ -149,7 +176,11 @@ public class Heuristic
 		
 		int maxChain = 1;
 		int currentChain = 1;
-		
+		int[][] winningSpaces = new int[6][2];
+		int numSpaces = 0;
+		int[] openSpace = new int[2];
+		openSpace[0] = -1;
+		openSpace[1] = -1;
 		
 		//Left-Right Chain
 		//Check left
@@ -159,11 +190,29 @@ public class Heuristic
 			currentChain++;
 			x--;
 		}
+		if(x > -1 && boardstate[y][x] == 0){
+			openSpace[0] = x;
+			openSpace[1] = y;
+		}
 		//Upon reaching terminating piece, space, or edge of the board, check to the right
 		x = column+1;
 		while(x < boardstate[y].length && boardstate[y][x] == player){
 			currentChain++;
 			x++;
+		}
+		if(currentChain == board.piecesToWin - 1){
+			if(openSpace[0] != -1){
+				winningSpaces[numSpaces][0] = openSpace[0];
+				winningSpaces[numSpaces][1] = openSpace[1];
+				numSpaces++;
+				openSpace[0] = -1;
+				openSpace[1] = -1;
+			}
+			if(x < boardstate[y].length && boardstate[y][x] == 0){
+				winningSpaces[numSpaces][0] = x;
+				winningSpaces[numSpaces][1] = y;
+				numSpaces++;
+			}
 		}
 		//Record left-right chain as the max chain
 		maxChain = currentChain;
@@ -178,11 +227,29 @@ public class Heuristic
 			currentChain++;
 			y++;
 		}
+		if(y < boardstate.length && boardstate[y][x] == 0){
+			openSpace[0] = x;
+			openSpace[1] = y;
+		}
 		//Upon reaching terminating piece, space, or edge of the board, check down
 		y = row - 1;
 		while(y > -1 && boardstate[y][x] == player){
 			currentChain++;
 			y--;
+		}
+		if(currentChain == board.piecesToWin - 1){
+			if(openSpace[0] != -1){
+				winningSpaces[numSpaces][0] = openSpace[0];
+				winningSpaces[numSpaces][1] = openSpace[1];
+				numSpaces++;
+				openSpace[0] = -1;
+				openSpace[1] = -1;
+			}
+			if(y > -1 && boardstate[y][x] == 0){
+				winningSpaces[numSpaces][0] = x;
+				winningSpaces[numSpaces][1] = y;
+				numSpaces++;
+			}
 		}
 		//If we have a new maxChain record it
 		if(currentChain > maxChain){
@@ -200,6 +267,10 @@ public class Heuristic
 			x--;
 			y++;
 		}
+		if(y < boardstate.length && x > -1 && boardstate[y][x] == 0){
+			openSpace[0] = x;
+			openSpace[1] = y;
+		}
 		//Upon reaching terminating piece, space, or edge of the board, check down-right
 		x = column + 1;
 		y = row - 1;
@@ -207,6 +278,20 @@ public class Heuristic
 			currentChain++;
 			x++;
 			y--;
+		}
+		if(currentChain == board.piecesToWin - 1){
+			if(openSpace[0] != -1){
+				winningSpaces[numSpaces][0] = openSpace[0];
+				winningSpaces[numSpaces][1] = openSpace[1];
+				numSpaces++;
+				openSpace[0] = -1;
+				openSpace[1] = -1;
+			}
+			if(y > -1 && x < boardstate[y].length && boardstate[y][x] == 0){
+				winningSpaces[numSpaces][0] = x;
+				winningSpaces[numSpaces][1] = y;
+				numSpaces++;
+			}
 		}
 		//If we have a new maxChain record it
 		if(currentChain > maxChain){
@@ -224,6 +309,10 @@ public class Heuristic
 			x++;
 			y++;
 		}
+		if(y < boardstate.length && x < boardstate[y].length && boardstate[y][x] == 0){
+			openSpace[0] = x;
+			openSpace[1] = y;
+		}
 		//Upon reaching terminating piece, space, or edge of the board, check down-left
 		x = column - 1;
 		y = row - 1;
@@ -232,9 +321,27 @@ public class Heuristic
 			x--;
 			y--;
 		}
+		if(currentChain == board.piecesToWin - 1){
+			if(openSpace[0] != -1){
+				winningSpaces[numSpaces][0] = openSpace[0];
+				winningSpaces[numSpaces][1] = openSpace[1];
+				numSpaces++;
+				openSpace[0] = -1;
+				openSpace[1] = -1;
+			}
+			if(y > -1 && x > -1 && boardstate[y][x] == 0){
+				winningSpaces[numSpaces][0] = x;
+				winningSpaces[numSpaces][1] = y;
+				numSpaces++;
+			}
+		}
 		//If we have a new maxChain record it
 		if(currentChain > maxChain){
 			maxChain = currentChain;
+		}
+		
+		for(int i=0; i<numSpaces; i++){
+			winningSpaceBoard[winningSpaces[i][1]][winningSpaces[i][0]] = player;
 		}
 		
 		return maxChain;

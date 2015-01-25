@@ -15,7 +15,7 @@ public class Minimax implements Runnable {
 		int depth = 1;
 		while(true){
 			bestMove = minimax(board, 1, true, depth, -10000, 10000);
-			//System.err.println("Completed depth " + depth + " " + bestMove[0] + " " + bestMove[1]);
+			System.err.println("Completed depth " + depth + " " + bestMove[0] + " " + bestMove[1]);
 			depth++;
 			if(interrupted){
 				interrupted = false;

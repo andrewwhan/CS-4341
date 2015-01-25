@@ -1,13 +1,16 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 
 public class RefInterface 
 {
 	// ToDo: Add Timer
-	String name = "AndrewAlex";
+	String name = "AlexAndrew";
 	Board board;
 	int playerNumber;
 	int boardHeight;
@@ -65,28 +68,37 @@ public class RefInterface
 	
 	public void updateBoard() throws IOException
 	{
-		int column;
+		String column;
 		int movetype;
 		Scanner s = new Scanner(in.readLine());
-		column = s.nextInt();
-		if (column == -1)
+		column = s.next();
+		if (column.equals("win"))
 		{
+			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
+			    out.println("1");
+			}catch (IOException e) {}
 			// We won the game
 			System.err.println("Good Game!");
 		}
-		else if(column == -2)
+		else if(column.equals("lose"))
 		{
+			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
+			    out.println("0");
+			}catch (IOException e) {}
 			// We lost the game
 			System.err.println("Congratulations");
 		}
-		else if(column == -3)
+		else if(column.equals("draw"))
 		{
+			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
+			    out.println("0.5");
+			}catch (IOException e) {}
 			// We tied the game
 			System.err.println("Well Played");
 		}
 		movetype = s.nextInt();
 		s.close();
 		// For our internal representation of the boardstate our opponent's pieces are 2's
-		board.makeMove(2, column, movetype);
+		board.makeMove(2, Integer.parseInt(column), movetype);
 	}	
 }
