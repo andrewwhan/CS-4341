@@ -3,6 +3,8 @@ public class Board {
 	
 	int[][] boardstate;
 	int piecesToWin;
+	boolean ourPopout;
+	boolean theirPopout;
 	
 	Board(int height, int width, int piecesToWin){
 		boardstate = new int[height][width];
@@ -40,6 +42,12 @@ public class Board {
 				boardstate[i][column] = boardstate[i+1][column];
 			}
 			boardstate[boardstate.length-1][column] = 0;
+			if(player == 1){
+				ourPopout = false;
+			}
+			else{
+				theirPopout = false;
+			}
 		}
 		//printBoard();
 	}
@@ -73,6 +81,12 @@ public class Board {
 			return false;
 		}
 		if(movetype == 0 && (boardstate[0][column] != player)){
+			return false;
+		}
+		if(movetype == 0 && player == 1 && !ourPopout){
+			return false;
+		}
+		if(movetype == 0 && player == 2 && !theirPopout){
 			return false;
 		}
 		

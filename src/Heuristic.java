@@ -21,6 +21,7 @@ public class Heuristic
 		central();
 		// System.out.println("value after central:" + value);
 		bottom();
+		popout();
 		win();
 		loss();
 		//System.err.println(value);
@@ -55,21 +56,16 @@ public class Heuristic
 	
 	private void checkAdjacent()
 	{
-		for (int i = 2; i < board.piecesToWin; i++)
+		for(int i = 0; i < board.boardstate.length; i++)
 		{
-			for(int j = 0; j < board.boardstate.length; j++)
+			for(int j = 0; j <board.boardstate[i].length; j++)
 			{
-				for(int k = 0; k <board.boardstate[j].length; k++)
-				{
-					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 1)
-					{
-						value += 2;
-					}
-					if (nInARow(board.boardstate, j,k) >= i && board.boardstate[j][k] == 2)
-					{
-						value -= 2;
-					}
-				}
+				int chain = nInARow(board.boardstate, i,j);
+				if(chain > 1){
+					//Add or subtract to value based on whether it's their chain or our chain
+					int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
+					value += 2*chain*usOrThem;
+				}			
 			}
 		}
 	}
@@ -82,16 +78,9 @@ public class Heuristic
 		{
 			for(int j=0; j < board.boardstate[i].length; j++)
 			{
-				if(board.boardstate[i][j] == 1)
-				{
-					value += center - Math.abs(j-center);
-					value += board.boardstate.length - i;
-				}
-				if(board.boardstate[i][j] == 2)
-				{
-					value -= center - Math.abs(j-center);
-					value -= board.boardstate.length - i;
-				}
+				int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
+				value += usOrThem*2*(center - Math.abs(j-center));
+				value += usOrThem*board.boardstate.length - i;
 			}
 		}
 	}
@@ -109,6 +98,15 @@ public class Heuristic
 			{
 				value -= 1;
 			}
+		}
+	}
+	
+	private void popout(){
+		if(board.ourPopout){
+			value += 50;
+		}
+		if(board.theirPopout){
+			value -= 50;
 		}
 	}
 	
@@ -141,8 +139,6 @@ public class Heuristic
 		}
 		return false;
 	}
-	
-	// Add Heuristic helper methods
 	
 	//Given the location of a piece, returns the length of the longest chain of pieces that particular piece is part of.
 	public int nInARow(int[][] boardstate, int row, int column){
@@ -243,4 +239,5 @@ public class Heuristic
 		
 		return maxChain;
 	}
+	
 }

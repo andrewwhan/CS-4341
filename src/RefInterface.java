@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class RefInterface 
 {
 	// ToDo: Add Timer
-	String name = "name";
+	String name = "AndrewAlex";
 	Board board;
 	int playerNumber;
 	int boardHeight;
