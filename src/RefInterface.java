@@ -74,27 +74,18 @@ public class RefInterface
 		column = s.next();
 		if (column.equals("win"))
 		{
-			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
-			    out.println("1");
-			}catch (IOException e) {}
 			// We won the game
-			System.err.println("Good Game!");
+			//System.err.println("Good Game!");
 		}
 		else if(column.equals("lose"))
 		{
-			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
-			    out.println("0");
-			}catch (IOException e) {}
 			// We lost the game
-			System.err.println("Congratulations");
+			//System.err.println("Congratulations");
 		}
 		else if(column.equals("draw"))
 		{
-			try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("weights2.csv", true)))) {
-			    out.println("0.5");
-			}catch (IOException e) {}
 			// We tied the game
-			System.err.println("Well Played");
+			//System.err.println("Well Played");
 		}
 		movetype = s.nextInt();
 		s.close();

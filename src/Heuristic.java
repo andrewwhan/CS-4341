@@ -4,12 +4,12 @@ public class Heuristic
 	int value = 0;
 	Board board;
 	int[][] winningSpaceBoard;
-	static int adjacencyMultiplier;
-	static int winningSpaceMultiplier;
-	static int centralMultiplier;
-	static int heightMultiplier;
-	static int bottomMultiplier;
-	static int popoutMultiplier;
+	static int adjacencyMultiplier = 2;
+	static int winningSpaceMultiplier = 2;
+	static int centralMultiplier = 2;
+	static int heightMultiplier = 2;
+	static int bottomMultiplier = 2;
+	static int popoutMultiplier = 2;
 	
 	public boolean terminalTest(Board boardstate){
 		board = boardstate;
