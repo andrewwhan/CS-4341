@@ -1,3 +1,4 @@
+//Andrew Han, Alex Church
 
 public class Minimax implements Runnable {
 
@@ -14,7 +15,7 @@ public class Minimax implements Runnable {
 		//Iterative deepening
 		int depth = 1;
 		while(true){
-			bestMove = minimax(board, 1, true, depth, -10000, 10000);
+			bestMove = minimax(board, 1, true, depth, -20000, 20000);
 			System.err.println("Completed depth " + depth + " " + bestMove[0] + " " + bestMove[1]);
 			depth++;
 			if(interrupted){
@@ -53,7 +54,7 @@ public class Minimax implements Runnable {
 		
 		int value;
 		//If we're player 1 and maxing start value off low, if we're minning start value high
-		value = (player == 1 ? -10000 : 10000);
+		value = (player == 1 ? -20000 : 20000);
 		int column=0;
 		int movetype=1;
 

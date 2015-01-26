@@ -1,3 +1,4 @@
+//Andrew Han, Alex Church
 
 public class Heuristic 
 {
@@ -5,11 +6,11 @@ public class Heuristic
 	Board board;
 	int[][] winningSpaceBoard;
 	static int adjacencyMultiplier = 2;
-	static int winningSpaceMultiplier = 2;
-	static int centralMultiplier = 2;
-	static int heightMultiplier = 2;
-	static int bottomMultiplier = 2;
-	static int popoutMultiplier = 2;
+	static int winningSpaceMultiplier = 7;
+	static int centralMultiplier = 9;
+	static int heightMultiplier = 1;
+	static int bottomMultiplier = 3;
+	static int popoutMultiplier = 5;
 	
 	public boolean terminalTest(Board boardstate){
 		board = boardstate;
@@ -24,17 +25,17 @@ public class Heuristic
 		value = 0;
 		winningSpaceBoard = new int[board.boardstate.length][board.boardstate[0].length];
 		// gets the current board states then uses the helper methods to return a value of a move
-		// System.out.println("value at start:" + value);
+//		 System.out.println("value at start:" + value);
 		checkAdjacent();
-		// System.out.println("value after checkAdjacent:" + value);
+//		 System.out.println("value after checkAdjacent:" + value);
 		countWinningSpaces();
 		central();
-		// System.out.println("value after central:" + value);
+//		 System.out.println("value after central:" + value);
 		bottom();
 		popout();
 		win();
 		loss();
-		//System.err.println(value);
+//		System.err.println(value);
 		return value;
 	}
 	
@@ -105,9 +106,11 @@ public class Heuristic
 		{
 			for(int j=0; j < board.boardstate[i].length; j++)
 			{
-				int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
-				value += usOrThem*centralMultiplier*(center - Math.abs(j-center));
-				value += usOrThem*(heightMultiplier/2)*(board.boardstate.length - i);
+				if(board.boardstate[i][j] != 0){
+					int usOrThem = (board.boardstate[i][j] == 1 ? 1 : -1);
+					value += usOrThem*centralMultiplier*(center - Math.abs(j-center));
+					value += usOrThem*(heightMultiplier/2)*(board.boardstate.length - i);
+				}
 			}
 		}
 	}
@@ -143,7 +146,7 @@ public class Heuristic
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 1){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
-						value += 9001;
+						value = 20000;
 						return true;
 					}
 				}
@@ -158,7 +161,12 @@ public class Heuristic
 			for(int j=0; j<board.boardstate[i].length; j++){
 				if(board.boardstate[i][j] == 2){
 					if(nInARow(board.boardstate, i, j) >= board.piecesToWin){
-						value += -9001;
+						if(value == 20000){
+							value = 0;
+						}
+						else{
+							value = -20000;
+						}
 						return true;
 					}
 				}

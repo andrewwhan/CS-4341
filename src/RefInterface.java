@@ -1,16 +1,15 @@
+//Andrew Han, Alex Church
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 
 public class RefInterface 
 {
 	// ToDo: Add Timer
-	String name = "AlexAndrew";
+	String name = "AndrewAlex";
 	Board board;
 	int playerNumber;
 	int boardHeight;
